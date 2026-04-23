@@ -1,22 +1,22 @@
-# Tucker-Boyle
+# IS 201 Web Project
 
-IS 201 portfolio site uploaded for GitHub Pages deployment.
+This project includes:
 
-## Included pages
-
-- `index.html` for the professional homepage
+- `index.html` for the professional home page
 - `resume.html` for the HTML resume
-- `career.html` for the graduate career-focus page
-- `scratch.html` for the from-scratch page
-- `app.html` for the interactive web app
+- `scratch.html` for the from-scratch page with custom CSS
+- `app.html` for the single-file interactive web app
 
-## GitHub Pages
+## Publish with GitHub Pages
 
-1. Open the repository settings in GitHub.
-2. Go to `Pages`.
-3. Set the source to deploy from the `Website` branch and the root folder.
-4. Save and wait for the site to publish.
+1. Create a GitHub repository and upload the contents of this folder.
+2. In the GitHub repository, open `Settings`, then `Pages`.
+3. Under `Build and deployment`, choose `Deploy from a branch`.
+4. Select the main branch and the root folder.
+5. Save the settings and wait for GitHub Pages to publish the site.
 
-If Pages is enabled on this branch, the project site URL will typically be:
+## Before you submit
 
-`https://cameronjohnboyle2-hub.github.io/Tucker-Boyle/`
+- Personalize the resume content with your real details.
+- Test every page link after publishing.
+- Open `scratch.html` from the live site to confirm the YouTube and Tableau embeds load correctly online.
