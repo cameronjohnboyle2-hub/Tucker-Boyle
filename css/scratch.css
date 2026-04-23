@@ -142,7 +142,8 @@ a {
 }
 
 .video-frame iframe,
-.tableau-frame iframe {
+.tableau-frame iframe,
+.tableau-frame tableau-viz {
   width: 100%;
   border: 0;
   display: block;
@@ -153,6 +154,10 @@ a {
 }
 
 .tableau-frame iframe {
+  min-height: 520px;
+}
+
+.tableau-frame tableau-viz {
   min-height: 520px;
 }
 
