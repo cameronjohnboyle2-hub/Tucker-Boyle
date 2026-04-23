@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weekend Trails | Scratch Page</title>
   <link rel="stylesheet" href="css/scratch.css">
+  <script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
 </head>
 <body>
   <header class="topbar">
@@ -84,9 +85,14 @@
 
       <div class="media-card" id="tableau-viz">
         <h2>Interactive Tableau view</h2>
-        <p>The assignment requires a live Tableau graph, so this embedded dashboard is fully interactive when the site is hosted online.</p>
+        <p>This live Tableau Public sample shows storm data and uses Tableau's current embedding component so the visualization stays interactive on the hosted site.</p>
         <div class="tableau-frame">
-          <iframe src="https://public.tableau.com/views/public_exercise/Dashboard1?:showVizHome=no&:embed=true" title="Interactive Tableau dashboard"></iframe>
+          <tableau-viz
+            id="stormTableauViz"
+            src="https://public.tableau.com/views/RegionalSampleWorkbook/Storms"
+            toolbar="bottom"
+            hide-tabs
+          ></tableau-viz>
         </div>
       </div>
     </div>
