@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" role="img" aria-labelledby="title desc">
+  <title id="title">Analytics and career growth illustration</title>
+  <desc id="desc">An abstract dashboard illustration showing charts, milestones, and upward momentum.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eff4ef"/>
+      <stop offset="100%" stop-color="#f9efe1"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2e6a60"/>
+      <stop offset="100%" stop-color="#1d443e"/>
+    </linearGradient>
+  </defs>
+  <rect width="760" height="560" rx="34" fill="url(#bg)"/>
+  <rect x="58" y="62" width="644" height="436" rx="28" fill="#ffffff" opacity="0.95"/>
+  <rect x="92" y="104" width="190" height="130" rx="22" fill="#edf5f2"/>
+  <rect x="304" y="104" width="164" height="130" rx="22" fill="#f8f0e5"/>
+  <rect x="490" y="104" width="174" height="130" rx="22" fill="#edf5f2"/>
+  <rect x="92" y="266" width="572" height="190" rx="26" fill="#f7faf8"/>
+  <circle cx="142" cy="157" r="26" fill="#d7a867"/>
+  <path d="M189 195 L213 169 L237 178 L259 138" fill="none" stroke="url(#accent)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M338 186 C357 145 379 129 422 128" fill="none" stroke="#d7a867" stroke-width="9" stroke-linecap="round"/>
+  <path d="M518 194 L547 160 L576 172 L604 127 L636 143" fill="none" stroke="#2e6a60" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="604" cy="127" r="10" fill="#d7a867"/>
+  <g fill="#2e6a60">
+    <rect x="124" y="358" width="48" height="62" rx="10"/>
+    <rect x="196" y="327" width="48" height="93" rx="10"/>
+    <rect x="268" y="294" width="48" height="126" rx="10"/>
+    <rect x="340" y="312" width="48" height="108" rx="10"/>
+  </g>
+  <path d="M454 392 C498 332 548 314 624 300" fill="none" stroke="#d7a867" stroke-width="10" stroke-linecap="round"/>
+  <path d="M622 300 l-22 -9 8 21 z" fill="#d7a867"/>
+  <circle cx="456" cy="392" r="14" fill="#ffffff" stroke="#2e6a60" stroke-width="8"/>
+  <circle cx="544" cy="334" r="14" fill="#ffffff" stroke="#2e6a60" stroke-width="8"/>
+  <circle cx="624" cy="300" r="14" fill="#ffffff" stroke="#2e6a60" stroke-width="8"/>
+  <rect x="104" y="78" width="138" height="10" rx="5" fill="#dce9e4"/>
+  <rect x="314" y="78" width="116" height="10" rx="5" fill="#efe3d0"/>
+  <rect x="496" y="78" width="122" height="10" rx="5" fill="#dce9e4"/>
+</svg>
