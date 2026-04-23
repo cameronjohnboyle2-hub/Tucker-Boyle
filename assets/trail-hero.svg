@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Mountain trail illustration</title>
+  <desc id="desc">An illustrated mountain scene with a winding trail, sun, and pine trees.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#dfeef7"/>
+      <stop offset="100%" stop-color="#f9f0dc"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d7e6d8"/>
+      <stop offset="100%" stop-color="#b7ccb8"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#sky)"/>
+  <circle cx="642" cy="110" r="62" fill="#f0c76d"/>
+  <path d="M0 390 L150 280 L270 388 L410 214 L600 410 L800 270 L800 600 L0 600 Z" fill="#9db6a1"/>
+  <path d="M0 430 L135 315 L282 456 L423 244 L588 430 L800 340 L800 600 L0 600 Z" fill="#6f8f79"/>
+  <path d="M0 505 Q170 458 272 515 T540 508 T800 535 L800 600 L0 600 Z" fill="url(#ground)"/>
+  <path d="M302 600 C320 508 362 458 468 404 C516 379 566 357 624 336 C533 396 474 458 448 600 Z" fill="#ebd2aa"/>
+  <path d="M338 600 C355 528 399 478 494 430 C534 410 576 392 624 376 C549 432 499 488 474 600 Z" fill="#d9b98b"/>
+  <g fill="#305848">
+    <path d="M95 498 l25-56 24 56 z"/>
+    <rect x="115" y="498" width="8" height="34" rx="3"/>
+    <path d="M155 520 l22-49 22 49 z"/>
+    <rect x="173" y="520" width="7" height="28" rx="3"/>
+    <path d="M628 472 l28-63 28 63 z"/>
+    <rect x="651" y="472" width="8" height="36" rx="3"/>
+    <path d="M688 508 l19-42 20 42 z"/>
+    <rect x="704" y="508" width="7" height="24" rx="3"/>
+  </g>
+  <g fill="#ffffff" opacity="0.76">
+    <path d="M363 287 l36-46 35 46 z"/>
+    <path d="M530 342 l28-34 29 34 z"/>
+    <path d="M197 360 l24-28 24 28 z"/>
+  </g>
+</svg>
