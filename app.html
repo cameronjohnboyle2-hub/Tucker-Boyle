@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trail Day Planner</title>
+  <style>
+    :root {
+      --canvas: #f5f0e8;
+      --panel: rgba(255, 255, 255, 0.9);
+      --ink: #1f2a2c;
+      --muted: #5d6b6c;
+      --forest: #2c5f57;
+      --gold: #d6a55b;
+      --line: rgba(44, 95, 87, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(214, 165, 91, 0.25), transparent 28%),
+        linear-gradient(160deg, #f8f4ed 0%, #e7efe8 60%, #dde8e5 100%);
+      min-height: 100vh;
+    }
+
+    a {
+      color: var(--forest);
+    }
+
+    .app-shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+    }
+
+    .top-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+      font-size: 0.96rem;
+    }
+
+    .top-links a {
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .top-links a:hover,
+    .top-links a:focus {
+      border-color: var(--forest);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .planner-card,
+    .result-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 22px 50px rgba(31, 42, 44, 0.08);
+    }
+
+    .hero-card {
+      padding: 32px;
+    }
+
+    .hero-card h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2.1rem, 4vw, 3.3rem);
+      line-height: 1.02;
+    }
+
+    .hero-card p {
+      color: var(--muted);
+      max-width: 60ch;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(44, 95, 87, 0.12);
+      color: var(--forest);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+    }
+
+    .planner-card {
+      padding: 28px;
+    }
+
+    .planner-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    input,
+    select,
+    button {
+      font: inherit;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(31, 42, 44, 0.18);
+      background: #fff;
+      color: var(--ink);
+    }
+
+    input[type="range"] {
+      padding: 0;
+      border: none;
+      background: transparent;
+    }
+
+    .range-note {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-top: 8px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 18px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover,
+    button:focus {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 20px rgba(31, 42, 44, 0.12);
+    }
+
+    .primary-button {
+      background: var(--forest);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .secondary-button {
+      background: rgba(44, 95, 87, 0.1);
+      color: var(--forest);
+      font-weight: 700;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .result-card {
+      padding: 28px;
+    }
+
+    .route-name {
+      margin: 8px 0 14px;
+      font-size: 1.75rem;
+    }
+
+    .detail-list {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .detail-list li {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(44, 95, 87, 0.06);
+    }
+
+    .effort-meter {
+      margin-top: 18px;
+      background: rgba(31, 42, 44, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      height: 14px;
+    }
+
+    .effort-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #6eb29c 0%, #2c5f57 70%, #1f3e39 100%);
+      transition: width 0.45s ease;
+    }
+
+    .mini-card {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(214, 165, 91, 0.12);
+      color: var(--ink);
+      margin-top: 18px;
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .planner-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card,
+      .planner-card,
+      .result-card {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <nav class="top-links">
+      <a href="scratch.html">Back to Scratch Page</a>
+      <a href="index.html">Professional Home</a>
+      <a href="resume.html">Resume</a>
+      <a href="career.html">Career Focus</a>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-card">
+        <span class="hero-badge">Interactive web app</span>
+        <h1>Trail Day Planner</h1>
+        <p>This single-page app turns a few quick preferences into a realistic trail-day recommendation. It is designed to feel useful rather than random, with route style, pacing, packing notes, and a readiness score all generated together.</p>
+      </div>
+
+      <form class="planner-card" id="plannerForm">
+        <h2>Build the day</h2>
+        <div class="planner-grid">
+          <div>
+            <label for="goal">Main goal</label>
+            <select id="goal" name="goal">
+              <option value="views">Scenic views</option>
+              <option value="training">Workout challenge</option>
+              <option value="reset">Calm reset</option>
+              <option value="social">Social outing</option>
+            </select>
+          </div>
+          <div>
+            <label for="weather">Weather</label>
+            <select id="weather" name="weather">
+              <option value="cool">Cool and clear</option>
+              <option value="mild">Mild and sunny</option>
+              <option value="hot">Hot afternoon</option>
+              <option value="stormy">Storm risk</option>
+            </select>
+          </div>
+          <div>
+            <label for="hours">Hours available</label>
+            <input id="hours" name="hours" type="range" min="2" max="10" value="5">
+            <p class="range-note"><span id="hoursValue">5</span> hours</p>
+          </div>
+          <div>
+            <label for="energy">Energy level</label>
+            <input id="energy" name="energy" type="range" min="1" max="5" value="3">
+            <p class="range-note">Energy: <span id="energyValue">3</span> out of 5</p>
+          </div>
+          <div>
+            <label for="company">Group style</label>
+            <select id="company" name="company">
+              <option value="solo">Solo recharge</option>
+              <option value="pair">Two-person day</option>
+              <option value="friends">Friends group</option>
+              <option value="family">Family pace</option>
+            </select>
+          </div>
+          <div>
+            <label for="altitude">Altitude comfort</label>
+            <select id="altitude" name="altitude">
+              <option value="steady">Comfortable up high</option>
+              <option value="moderate">Moderate comfort</option>
+              <option value="cautious">Prefer lower elevation</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button class="primary-button" type="submit">Generate my plan</button>
+          <button class="secondary-button" type="button" id="surpriseBtn">Surprise me</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="result-grid">
+      <div class="result-card">
+        <p class="hero-badge">Recommended route style</p>
+        <h2 class="route-name" id="routeName">Alpine Lake Loop</h2>
+        <p id="routeSummary">A balanced route with strong payoff, good photo moments, and enough effort to feel like a real day outside without turning the outing into a grind.</p>
+
+        <div class="effort-meter" aria-label="Effort score">
+          <div class="effort-fill" id="effortFill"></div>
+        </div>
+
+        <ul class="detail-list">
+          <li><strong>Ideal start:</strong> <span id="startTime">7:15 AM</span></li>
+          <li><strong>Suggested distance:</strong> <span id="distance">6 to 7 miles</span></li>
+          <li><strong>Best pace:</strong> <span id="pace">Steady with one longer photo stop</span></li>
+          <li><strong>Pack focus:</strong> <span id="pack">Water, light layer, and trail snacks</span></li>
+        </ul>
+      </div>
+
+      <div class="result-card">
+        <p class="hero-badge">Execution notes</p>
+        <div class="mini-card">
+          <strong>Trail mindset</strong>
+          <span id="mindset">Give yourself enough margin to enjoy the scenery instead of rushing from checkpoint to checkpoint.</span>
+        </div>
+        <div class="mini-card">
+          <strong>Weather call</strong>
+          <span id="weatherNote">A mild forecast means you can keep the plan flexible and enjoy a slightly longer viewpoint stop.</span>
+        </div>
+        <div class="mini-card">
+          <strong>Best fit for your group</strong>
+          <span id="groupNote">This route style works well for a small group that wants conversation and a memorable payoff.</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("plannerForm");
+    const hoursInput = document.getElementById("hours");
+    const energyInput = document.getElementById("energy");
+    const hoursValue = document.getElementById("hoursValue");
+    const energyValue = document.getElementById("energyValue");
+    const surpriseBtn = document.getElementById("surpriseBtn");
+
+    const output = {
+      routeName: document.getElementById("routeName"),
+      routeSummary: document.getElementById("routeSummary"),
+      startTime: document.getElementById("startTime"),
+      distance: document.getElementById("distance"),
+      pace: document.getElementById("pace"),
+      pack: document.getElementById("pack"),
+      mindset: document.getElementById("mindset"),
+      weatherNote: document.getElementById("weatherNote"),
+      groupNote: document.getElementById("groupNote"),
+      effortFill: document.getElementById("effortFill")
+    };
+
+    const routes = {
+      views: {
+        name: "Alpine Lake Loop",
+        summary: "A visually rewarding route with a clear destination, strong scenery, and enough challenge to feel memorable without becoming overwhelming.",
+        baseDistance: 6,
+        pace: "Steady hiking with a scenic midpoint break",
+        pack: "Extra water, camera, and a light wind layer",
+        mindset: "Protect a little extra time for the view because that is the whole point of the day."
+      },
+      training: {
+        name: "Ridgeline Push",
+        summary: "A more athletic outing built around vertical gain, consistent movement, and a clean workout feel from the first mile to the last.",
+        baseDistance: 8,
+        pace: "Purposeful pace with short recovery stops",
+        pack: "Electrolytes, trail food, and a dry shirt for the drive home",
+        mindset: "Keep the first third conservative so you have enough energy to finish strong."
+      },
+      reset: {
+        name: "Forest Recovery Walk",
+        summary: "A lower-pressure route that favors shade, rhythm, and mental reset over maximum mileage or elevation.",
+        baseDistance: 4,
+        pace: "Easy conversational pace",
+        pack: "Water, journal, and a comfortable outer layer",
+        mindset: "Let the route be restorative instead of trying to turn it into a performance test."
+      },
+      social: {
+        name: "Sunrise Switchback Social",
+        summary: "A route designed for talking, shared breaks, and a payoff view that makes the group feel like the early start was worth it.",
+        baseDistance: 5,
+        pace: "Moderate pace with room for conversation",
+        pack: "Shared snacks, sun protection, and extra water",
+        mindset: "Choose connection over pace and keep the plan simple enough for everyone to enjoy it."
+      }
+    };
+
+    function updateRangeLabels() {
+      hoursValue.textContent = hoursInput.value;
+      energyValue.textContent = energyInput.value;
+    }
+
+    function buildPlan(goal, weather, hours, energy, company, altitude) {
+      const route = routes[goal];
+      let distance = route.baseDistance + Math.max(0, hours - 5) * 0.8 + (energy - 3) * 0.5;
+      let effort = 45 + (hours - 5) * 7 + (energy - 3) * 10;
+
+      if (weather === "hot") {
+        distance -= 0.6;
+        effort += 4;
+      }
+
+      if (weather === "stormy") {
+        distance -= 1.2;
+        effort += 6;
+      }
+
+      if (company === "family" || company === "friends") {
+        distance -= 0.4;
+      }
+
+      if (altitude === "cautious") {
+        distance -= 0.8;
+        effort -= 3;
+      } else if (altitude === "steady") {
+        effort += 4;
+      }
+
+      distance = Math.max(2.5, Math.min(10.5, distance));
+      effort = Math.max(20, Math.min(95, effort));
+
+      let startTime = "7:15 AM";
+      if (weather === "hot") {
+        startTime = "6:15 AM";
+      } else if (weather === "stormy") {
+        startTime = "6:45 AM";
+      } else if (goal === "reset") {
+        startTime = "8:00 AM";
+      }
+
+      let weatherNote = "A mild forecast means you can stay flexible and enjoy a longer break at your turnaround point.";
+      if (weather === "cool") {
+        weatherNote = "Cool conditions are ideal for longer movement, but bring one extra layer for trailheads and ridge wind.";
+      } else if (weather === "hot") {
+        weatherNote = "Heat changes the whole plan. Start earlier, lower the effort slightly, and protect hydration from the first mile.";
+      } else if (weather === "stormy") {
+        weatherNote = "Storm risk means it is smart to choose a route with easier exit options and a firm turnaround time.";
+      }
+
+      let groupNote = "This route style works well for a small group that wants conversation and a memorable payoff.";
+      if (company === "solo") {
+        groupNote = "A solo day gives you more freedom to pace the route around your energy and stop when the view feels right.";
+      } else if (company === "pair") {
+        groupNote = "With two people, this plan gives you enough motion to feel productive while still leaving room to talk.";
+      } else if (company === "friends") {
+        groupNote = "For a friends group, the route stays active without turning the day into a race.";
+      } else if (company === "family") {
+        groupNote = "For a family pace, the best choice is a route where the destination feels rewarding without demanding constant pushing.";
+      }
+
+      const low = Math.floor(distance);
+      const high = Math.ceil(distance + 0.8);
+
+      return {
+        routeName: route.name,
+        routeSummary: route.summary,
+        startTime,
+        distance: low === high ? low + " miles" : low + " to " + high + " miles",
+        pace: route.pace,
+        pack: route.pack,
+        mindset: route.mindset,
+        weatherNote,
+        groupNote,
+        effort
+      };
+    }
+
+    function renderPlan(plan) {
+      output.routeName.textContent = plan.routeName;
+      output.routeSummary.textContent = plan.routeSummary;
+      output.startTime.textContent = plan.startTime;
+      output.distance.textContent = plan.distance;
+      output.pace.textContent = plan.pace;
+      output.pack.textContent = plan.pack;
+      output.mindset.textContent = plan.mindset;
+      output.weatherNote.textContent = plan.weatherNote;
+      output.groupNote.textContent = plan.groupNote;
+      output.effortFill.style.width = plan.effort + "%";
+    }
+
+    function generateFromInputs() {
+      const plan = buildPlan(
+        form.goal.value,
+        form.weather.value,
+        Number(form.hours.value),
+        Number(form.energy.value),
+        form.company.value,
+        form.altitude.value
+      );
+      renderPlan(plan);
+    }
+
+    hoursInput.addEventListener("input", updateRangeLabels);
+    energyInput.addEventListener("input", updateRangeLabels);
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      generateFromInputs();
+    });
+
+    surpriseBtn.addEventListener("click", function () {
+      const goals = ["views", "training", "reset", "social"];
+      const weatherOptions = ["cool", "mild", "hot", "stormy"];
+      const companyOptions = ["solo", "pair", "friends", "family"];
+      const altitudeOptions = ["steady", "moderate", "cautious"];
+
+      form.goal.value = goals[Math.floor(Math.random() * goals.length)];
+      form.weather.value = weatherOptions[Math.floor(Math.random() * weatherOptions.length)];
+      form.company.value = companyOptions[Math.floor(Math.random() * companyOptions.length)];
+      form.altitude.value = altitudeOptions[Math.floor(Math.random() * altitudeOptions.length)];
+      form.hours.value = String(2 + Math.floor(Math.random() * 9));
+      form.energy.value = String(1 + Math.floor(Math.random() * 5));
+      updateRangeLabels();
+      generateFromInputs();
+    });
+
+    updateRangeLabels();
+    generateFromInputs();
+  </script>
+</body>
+</html>
